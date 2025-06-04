@@ -82,7 +82,7 @@ int main()
             }
             else if ((mikasa_y + mikasaSize) > height) {
                 mikasa_dy = -mikasa_dy;
-                angle -= 3.14;;
+                angle -= 3.14;
             }
             mikasa_x += mikasa_dx;
             mikasa_y += mikasa_dy;
@@ -96,19 +96,20 @@ int main()
         {
             if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
                 flag = 0;
-                angle = 0;
             }
             if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
                 flag = ALLEGRO_FLIP_HORIZONTAL;
                 angle = 0;
             }
             if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-                flag = ALLEGRO_FLIP_VERTICAL;
                 angle = (1.57 + 3.14);
             }
             if (ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-                flag = 0;
+                flag = ALLEGRO_FLIP_VERTICAL;
                 angle = 1.57;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+                system("pause");
             }
         }
         if (redraw && al_is_event_queue_empty(event_queue)) {
