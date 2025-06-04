@@ -10,16 +10,17 @@ int main()
 {
     const float FPS = 60;
     int width = 900, height = 800;
-    const int mikasaSize = 32;
+    const int mikasaSize = 150;
     bool done = false, redraw = false;
     ALLEGRO_DISPLAY* display = NULL;
     ALLEGRO_EVENT_QUEUE* event_queue = NULL;
     ALLEGRO_TIMER* timer = NULL;
     ALLEGRO_BITMAP* mikasa = NULL;
-    float mikasa_x = width / 4.0 - mikasaSize / 2.0;
-    float mikasa_y = height / 4.0 - mikasaSize / 2.0;
-    float mikasa_dx = -4.0, mikasa_dy = 4.0;
     ALLEGRO_BITMAP* image = NULL;
+    float mikasa_x = width / 2.0 - mikasaSize / 2.0;
+    float mikasa_y = height / 2.0 - mikasaSize / 2.0;
+    float mikasa_dx = -4.0, mikasa_dy = 4.0;
+    int flag = 1;
 
     if (!al_init()) {
         al_show_native_message_box(NULL, "Error", "Allegro failed to initialize", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
@@ -42,7 +43,7 @@ int main()
         return -1;
     }
     image = al_load_bitmap("forest.jpg");
-    mikasa = al_load_bitmap("Mikasa.png");
+    mikasa = al_load_bitmap("Mikasa150.png");
     event_queue = al_create_event_queue();
     if (!event_queue) {
         al_destroy_bitmap(mikasa);
@@ -54,7 +55,7 @@ int main()
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_scaled_bitmap(image, 0, 0, 1280, 720, 0, 0, width, height, 0);
-    al_draw_scaled_bitmap(mikasa, 0, 0, 840, 859, 0, 0, mikasa_x, mikasa_y, 0);
+    al_draw_bitmap(mikasa, mikasa_x, mikasa_y, flag);
     al_flip_display();
     al_start_timer(timer);
 
@@ -63,18 +64,32 @@ int main()
         al_wait_for_event(event_queue, &ev);
 
         if (ev.type == ALLEGRO_EVENT_TIMER) {
+            if (mikasa_x < 0) {
+                mikasa_dx = -mikasa_dx;
+            } 
+            else if (mikasa_x > width - mikasaSize) {
+                mikasa_dx = -mikasa_dx;
+            }
+            else if (mikasa_y < 0) {
+                mikasa_dy = -mikasa_dy;
+            } 
+            else if(mikasa_y > height - mikasaSize) {
+                mikasa_dy = -mikasa_dy;
+            }
+            mikasa_x += mikasa_dx;
+            mikasa_y += mikasa_dy;
             redraw = true;
+       
         }
         else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
         {
             done = true;
         }
-        else if (redraw && al_is_event_queue_empty(event_queue)) {
+        if (redraw && al_is_event_queue_empty(event_queue)) {
             redraw = false;
-
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_scaled_bitmap(image, 0, 0, 1280, 720, 0, 0, width, height, 0);
-            al_draw_scaled_bitmap(mikasa, 0, 0, 840, 859, 0, 0, mikasa_x, mikasa_y, 0);
+            al_draw_bitmap(mikasa, mikasa_x, mikasa_y, flag);
             al_flip_display();
         }
     }
