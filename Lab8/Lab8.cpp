@@ -19,7 +19,7 @@ int main()
     ALLEGRO_BITMAP* image = NULL;
     float mikasa_x = width / 2.0 - mikasaSize / 2.0;
     float mikasa_y = height / 2.0 - mikasaSize / 2.0;
-    float mikasa_dx = -4.0, mikasa_dy = 4.0;
+    float mikasa_dx = 4.0, mikasa_dy = 4.0;
     float angle = 0;
     int flag = 1;
 
