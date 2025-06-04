@@ -20,6 +20,7 @@ int main()
     float mikasa_x = width / 2.0 - mikasaSize / 2.0;
     float mikasa_y = height / 2.0 - mikasaSize / 2.0;
     float mikasa_dx = -4.0, mikasa_dy = 4.0;
+    float angle = 0;
     int flag = 1;
 
     if (!al_init()) {
@@ -55,7 +56,7 @@ int main()
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_scaled_bitmap(image, 0, 0, 1280, 720, 0, 0, width, height, 0);
-    al_draw_bitmap(mikasa, mikasa_x, mikasa_y, flag);
+    al_draw_rotated_bitmap(mikasa, 16, 16, mikasa_x, mikasa_y, angle, flag);
     al_flip_display();
     al_start_timer(timer);
 
@@ -64,32 +65,32 @@ int main()
         al_wait_for_event(event_queue, &ev);
 
         if (ev.type == ALLEGRO_EVENT_TIMER) {
-            if (mikasa_x < 0) {
+            redraw = true;
+            if (mikasa_x < 0 || mikasa_x > width - mikasaSize) {
                 mikasa_dx = -mikasa_dx;
+                angle += 3.14;
             } 
-            else if (mikasa_x > width - mikasaSize) {
-                mikasa_dx = -mikasa_dx;
-            }
-            else if (mikasa_y < 0) {
+            else if (mikasa_y < 0 || mikasa_y > height - mikasaSize) {
                 mikasa_dy = -mikasa_dy;
-            } 
-            else if(mikasa_y > height - mikasaSize) {
-                mikasa_dy = -mikasa_dy;
+                angle += 3.14;
             }
             mikasa_x += mikasa_dx;
             mikasa_y += mikasa_dy;
-            redraw = true;
-       
+            
         }
         else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
         {
             done = true;
         }
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+        {
+            
+        }
         if (redraw && al_is_event_queue_empty(event_queue)) {
             redraw = false;
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_scaled_bitmap(image, 0, 0, 1280, 720, 0, 0, width, height, 0);
-            al_draw_bitmap(mikasa, mikasa_x, mikasa_y, flag);
+            al_draw_rotated_bitmap(mikasa, al_get_bitmap_width(mikasa)/2, al_get_bitmap_height(mikasa)/2, mikasa_x + al_get_bitmap_width(mikasa) / 2, mikasa_y + al_get_bitmap_height(mikasa) / 2, angle, flag);
             al_flip_display();
         }
     }
