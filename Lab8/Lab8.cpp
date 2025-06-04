@@ -2,10 +2,27 @@
 //
 
 #include <iostream>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    const float FPS = 60;
+    int width = 900, height = 800;
+    const int mikasaSize = 32;
+    ALLEGRO_DISPLAY* display = NULL;
+    ALLEGRO_EVENT_QUEUE* event_queue = NULL;
+    ALLEGRO_TIMER* timer = NULL;
+    ALLEGRO_BITMAP* mikasa = NULL;
+
+    if (!al_init()) {
+
+    }
+
+    al_destroy_display(display);
+    al_destroy_event_queue(event_queue);
+    al_destroy_timer(timer);
+    al_destroy_bitmap(mikasa);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
