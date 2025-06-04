@@ -16,8 +16,8 @@ int main()
     ALLEGRO_EVENT_QUEUE* event_queue = NULL;
     ALLEGRO_TIMER* timer = NULL;
     ALLEGRO_BITMAP* mikasa = NULL;
-    float mikasa_x = width / 2.0 - mikasaSize / 2.0;
-    float mikasa_y = height / 2.0 - mikasaSize / 2.0;
+    float mikasa_x = width / 4.0 - mikasaSize / 2.0;
+    float mikasa_y = height / 4.0 - mikasaSize / 2.0;
     float mikasa_dx = -4.0, mikasa_dy = 4.0;
     ALLEGRO_BITMAP* image = NULL;
 
