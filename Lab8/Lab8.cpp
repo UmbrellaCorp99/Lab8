@@ -52,8 +52,10 @@ int main()
         al_destroy_timer(timer);
         return -1;
     }
+    al_install_keyboard();
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_scaled_bitmap(image, 0, 0, 1280, 720, 0, 0, width, height, 0);
     al_draw_rotated_bitmap(mikasa, 16, 16, mikasa_x, mikasa_y, angle, flag);
@@ -66,13 +68,21 @@ int main()
 
         if (ev.type == ALLEGRO_EVENT_TIMER) {
             redraw = true;
-            if (mikasa_x < 0 || mikasa_x > width - mikasaSize) {
+            if (mikasa_x < 0){
                 mikasa_dx = -mikasa_dx;
                 angle += 3.14;
-            } 
-            else if (mikasa_y < 0 || mikasa_y > height - mikasaSize) {
+            }
+            else if (mikasa_x > width - mikasaSize) {
+                mikasa_dx = -mikasa_dx;
+                angle -= 3.14;
+            }
+            else if (mikasa_y < 0) {
                 mikasa_dy = -mikasa_dy;
                 angle += 3.14;
+            }
+            else if ((mikasa_y + mikasaSize) > height) {
+                mikasa_dy = -mikasa_dy;
+                angle -= 3.14;;
             }
             mikasa_x += mikasa_dx;
             mikasa_y += mikasa_dy;
@@ -84,7 +94,22 @@ int main()
         }
         else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
         {
-            
+            if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+                flag = 0;
+                angle = 0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+                flag = ALLEGRO_FLIP_HORIZONTAL;
+                angle = 0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+                flag = ALLEGRO_FLIP_VERTICAL;
+                angle = (1.57 + 3.14);
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+                flag = 0;
+                angle = 1.57;
+            }
         }
         if (redraw && al_is_event_queue_empty(event_queue)) {
             redraw = false;
